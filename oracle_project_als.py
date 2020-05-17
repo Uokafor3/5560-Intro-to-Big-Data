@@ -14,6 +14,32 @@
 
 # COMMAND ----------
 
+# MAGIC %md ## Steps to download dataset and do some data engineering (Cleaning up dataset) before importing into databricks
+# MAGIC 
+# MAGIC all dataset engineering were done in Jupyter Notebook before importing into databricks
+# MAGIC 
+# MAGIC dataset link: https://www.kaggle.com/darshank2019/review#yelp_academic_dataset_review.csv
+# MAGIC 
+# MAGIC download dataset and using a Jupyter Notebook(we used google colab), we accessed the dataset with total rows = 6685900
+# MAGIC 
+# MAGIC we took a slice of the full dataset of the first 1500000 rows and used that as our full dataset.
+# MAGIC 
+# MAGIC we removed the inverted commas and the letter "b" present in all rows (data cleaning)
+# MAGIC 
+# MAGIC we converted the alphanumeric values in the user_id, review_id, & business_id to numeric values
+# MAGIC 
+# MAGIC we tried to drop rows wit missing values and counted the total number of rows again and it was still 1500000.
+# MAGIC 
+# MAGIC we created a subset of our cleaned dataset named df_ml_csv with 120000 rows which we used for both Azure ML & Databricks
+# MAGIC 
+# MAGIC NOTE: the .py & .ipynb files containing all codes used for data engineering and analysis is included in the total submission package and is availble in our github link
+
+# COMMAND ----------
+
+# MAGIC %md Import the df_ml.csv dataset
+
+# COMMAND ----------
+
 # MAGIC %md ##Prepare the Data
 # MAGIC First, import the libraries you will need and prepare the training and test data:
 
@@ -58,7 +84,7 @@ df_mlSchema = StructType([
 
 # COMMAND ----------
 
-IS_SPARK_SUBMIT_CLI = True
+IS_SPARK_SUBMIT_CLI = False
 if IS_SPARK_SUBMIT_CLI:
     sc = SparkContext.getOrCreate()
     spark = SparkSession(sc)
@@ -96,7 +122,8 @@ df_ml.select("review_id").distinct().count()
 
 # COMMAND ----------
 
-
+# MAGIC %md ## the label column, stars is conditioned as follows:  
+# MAGIC stars (stars > 2 = 1 (positive review) else: 0 (negative review)
 
 # COMMAND ----------
 
@@ -114,8 +141,13 @@ df_ml.select("business_id").distinct().count()
 
 # COMMAND ----------
 
-# MAGIC %md ### Prepare the Data
-# MAGIC To prepare the data, split it into a training set and a test set.
+
+
+# COMMAND ----------
+
+# MAGIC %md ##Create a New Dataframe with columns "user_id", "business_id" and "stars"(Label)
+# MAGIC 
+# MAGIC These are the columns we used in building of ALS Model
 
 # COMMAND ----------
 
@@ -223,3 +255,11 @@ prediction.show(20)
 evaluator = RegressionEvaluator(labelCol="trueLabel", predictionCol="prediction", metricName="rmse")
 rmse = evaluator.evaluate(prediction)
 print ("Root Mean Square Error (RMSE):", rmse)
+
+# COMMAND ----------
+
+# MAGIC %md ## Root Mean Square Error (RMSE): 0.6850465221305958
+
+# COMMAND ----------
+
+
