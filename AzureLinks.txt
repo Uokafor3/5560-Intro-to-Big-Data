@@ -1,0 +1,4 @@
+Link to Azure Model 01--Boosted Decision Tree: https://gallery.cortanaintelligence.com/Experiment/Boosted-Decision
+Link to Azure Model 02--Multiclass Decision Forest: https://gallery.cortanaintelligence.com/Experiment/Multiclass-Decision-Forest-3
+Link to Azure Model 03--Decision Forest: https://gallery.cortanaintelligence.com/Experiment/TwoClassDecisionForest
+Link to Azure Model 04--Matchbox: https://gallery.cortanaintelligence.com/Experiment/Project04
